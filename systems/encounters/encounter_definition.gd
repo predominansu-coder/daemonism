@@ -5,6 +5,7 @@ class_name EncounterDefinition
 @export var encounter_id: StringName = &""
 @export var enemy_ids: PackedStringArray = PackedStringArray()
 @export var combat_timing: CombatTiming
+@export var attack_pattern: AttackPatternDefinition
 
 
 func is_configured() -> bool:
@@ -15,4 +16,9 @@ func is_configured() -> bool:
 		if enemy_id.is_empty():
 			return false
 
-	return combat_timing != null and combat_timing.is_configured()
+	if combat_timing == null or not combat_timing.is_configured():
+		return false
+	# Old duration-only content may still omit a pattern. Sequence mode cannot.
+	if attack_pattern == null:
+		return combat_timing.attack_end_condition == CombatTiming.AttackEndCondition.DURATION
+	return attack_pattern.is_configured()

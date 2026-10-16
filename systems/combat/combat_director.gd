@@ -17,6 +17,7 @@ signal action_window_expired
 @onready var attack_gate: AttackPhaseGate = $AttackPhaseGate
 
 var phase: Phase = Phase.IDLE
+var attack_cycle: int = 0
 var _timing: CombatTiming
 var _remaining_action_seconds: float = 0.0
 
@@ -38,12 +39,16 @@ func begin(timing: CombatTiming) -> bool:
 
 
 func stop() -> void:
+	attack_cycle += 1
 	if is_instance_valid(attack_gate):
 		attack_gate.stop()
 	set_process(false)
 	_remaining_action_seconds = 0.0
 	_timing = null
+	var previous_phase := phase
 	phase = Phase.IDLE
+	if previous_phase != Phase.IDLE:
+		phase_changed.emit(phase)
 
 
 func can_accept_player_action() -> bool:
@@ -62,6 +67,7 @@ func notify_player_action_applied() -> bool:
 func finish_encounter() -> void:
 	if phase == Phase.FINISHED:
 		return
+	attack_cycle += 1
 	if is_instance_valid(attack_gate):
 		attack_gate.stop()
 	set_process(false)
@@ -71,11 +77,24 @@ func finish_encounter() -> void:
 
 
 func _begin_enemy_attack() -> void:
+	if _timing == null:
+		return
+	attack_cycle += 1
 	set_process(false)
 	_remaining_action_seconds = 0.0
 	phase = Phase.ENEMY_ATTACK
-	phase_changed.emit(phase)
 	attack_gate.begin(_timing)
+	# Arm the gate before a pattern listener can synchronously finish.
+	phase_changed.emit(phase)
+
+
+func report_attack_sequence_finished(cycle: int) -> bool:
+	if cycle != attack_cycle or phase != Phase.ENEMY_ATTACK or _timing == null:
+		return false
+	if _timing.attack_end_condition != CombatTiming.AttackEndCondition.SEQUENCE_FINISHED:
+		return false
+	attack_gate.report_sequence_finished()
+	return true
 
 
 func _on_attack_phase_finished() -> void:
@@ -84,18 +103,24 @@ func _on_attack_phase_finished() -> void:
 
 	_remaining_action_seconds = _timing.action_duration_seconds
 	phase = Phase.PLAYER_ACTION
-	phase_changed.emit(phase)
-	action_time_changed.emit(_remaining_action_seconds, _timing.action_duration_seconds)
+	var cycle := attack_cycle
 	set_process(true)
+	phase_changed.emit(phase)
+	if phase == Phase.PLAYER_ACTION and attack_cycle == cycle and _timing != null:
+		action_time_changed.emit(_remaining_action_seconds, _timing.action_duration_seconds)
 
 
 func _process(delta: float) -> void:
 	if phase != Phase.PLAYER_ACTION or _timing == null:
 		return
 
+	var cycle := attack_cycle
 	_remaining_action_seconds = maxf(0.0, _remaining_action_seconds - delta)
 	action_time_changed.emit(_remaining_action_seconds, _timing.action_duration_seconds)
+	if phase != Phase.PLAYER_ACTION or attack_cycle != cycle or _timing == null:
+		return
 
 	if _remaining_action_seconds <= 0.0:
 		action_window_expired.emit()
-		_begin_enemy_attack()
+		if phase == Phase.PLAYER_ACTION and attack_cycle == cycle and _timing != null:
+			_begin_enemy_attack()

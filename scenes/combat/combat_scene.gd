@@ -6,6 +6,8 @@ signal development_exit_requested
 var _encounter: EncounterRequest
 
 @onready var director: CombatDirector = $CombatDirector
+@onready var arena: CombatArena = $Arena
+@onready var dash_label: Label = $HUD/UIRoot/DashLabel
 @onready var encounter_label: Label = $HUD/UIRoot/CenterContainer/VBoxContainer/EncounterLabel
 @onready var phase_label: Label = $HUD/UIRoot/CenterContainer/VBoxContainer/PhaseLabel
 @onready var exit_button: Button = $HUD/UIRoot/CenterContainer/VBoxContainer/DevelopmentExitButton
@@ -15,16 +17,19 @@ var _encounter: EncounterRequest
 
 
 func _ready() -> void:
+	arena.player.set_controls_enabled(false)
 	exit_button.pressed.connect(_on_exit_pressed)
 	director.phase_changed.connect(_on_phase_changed)
 	director.action_time_changed.connect(_on_action_time_changed)
 	director.action_window_expired.connect(_on_action_window_expired)
+	arena.pattern_runner.sequence_finished.connect(director.report_attack_sequence_finished)
 	action_window_hud.hide()
 	_update_encounter_label()
 
 
 # GameRoot calls this after the scene enters the tree.
 func set_encounter(request: EncounterRequest) -> void:
+	director.stop()
 	_encounter = request
 	_update_encounter_label()
 
@@ -49,13 +54,23 @@ func _update_encounter_label() -> void:
 
 
 func _on_phase_changed(next_phase: int) -> void:
+	# Hazards belong only to the active attack cycle, never to the action menu.
+	arena.pattern_runner.stop()
+	arena.player.set_controls_enabled(next_phase in [
+		CombatDirector.Phase.ENEMY_ATTACK, CombatDirector.Phase.PLAYER_ACTION
+	])
 	match next_phase:
 		CombatDirector.Phase.ENEMY_ATTACK:
 			action_window_hud.hide()
-			phase_label.text = "적 공격 단계\n(공격 패턴·피격 판정은 아직 미구현)"
+			phase_label.text = "적 공격 단계"
+			var pattern := _encounter.definition.attack_pattern
+			if pattern != null:
+				if not arena.pattern_runner.start_sequence(pattern, arena.player, arena.bounds, director.attack_cycle):
+					push_error("공격 패턴을 시작할 수 없습니다.")
+					director.stop()
 		CombatDirector.Phase.PLAYER_ACTION:
 			action_window_hud.show()
-			phase_label.text = "공동 행동 단계\n(Q/E 행동 처리 연결 전)"
+			phase_label.text = "공동 행동 단계"
 		CombatDirector.Phase.FINISHED:
 			action_window_hud.hide()
 			phase_label.text = "전투 종료"
@@ -75,5 +90,19 @@ func _on_action_window_expired() -> void:
 
 
 func _on_exit_pressed() -> void:
+	arena.pattern_runner.stop()
 	director.stop()
 	development_exit_requested.emit()
+
+
+func _process(_delta: float) -> void:
+	if arena.player.dash_cooldown_remaining > 0.0:
+		dash_label.text = "대쉬  %.1f초" % arena.player.dash_cooldown_remaining
+	else:
+		dash_label.text = "Space 대쉬 준비"
+
+
+func _exit_tree() -> void:
+	# Also handle external scene removal, without relying on the debug button.
+	if is_instance_valid(arena):
+		arena.pattern_runner.stop()

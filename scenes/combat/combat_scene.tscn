@@ -1,13 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://b7hray5qw17ob"]
+[gd_scene load_steps=5 format=3 uid="uid://b7hray5qw17ob"]
 
 [ext_resource type="Script" path="res://scenes/combat/combat_scene.gd" id="1_combat_script"]
 [ext_resource type="Script" path="res://systems/combat/combat_director.gd" id="2_director"]
 [ext_resource type="Script" path="res://systems/combat/attack_phase_gate.gd" id="3_attack_gate"]
+[ext_resource type="PackedScene" path="res://scenes/combat/combat_arena.tscn" id="4_arena"]
 
 [node name="CombatScene" type="Node2D"]
 script = ExtResource("1_combat_script")
 
-[node name="Arena" type="Node2D" parent="."]
+[node name="Arena" parent="." instance=ExtResource("4_arena")]
 
 [node name="CombatDirector" type="Node" parent="."]
 script = ExtResource("2_director")
@@ -52,10 +53,13 @@ show_percentage = false
 
 [node name="CenterContainer" type="CenterContainer" parent="HUD/UIRoot"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
+anchors_preset = 12
+anchor_top = 1.0
 anchor_bottom = 1.0
-grow_horizontal = 2
+offset_left = 24.0
+offset_top = -122.0
+offset_right = 420.0
+offset_bottom = -16.0
 grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HUD/UIRoot/CenterContainer"]
@@ -74,3 +78,11 @@ horizontal_alignment = 1
 [node name="DevelopmentExitButton" type="Button" parent="HUD/UIRoot/CenterContainer/VBoxContainer"]
 layout_mode = 2
 text = "개발용 복귀 (전투 결과 없음)"
+
+[node name="DashLabel" type="Label" parent="HUD/UIRoot"]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 90.0
+offset_right = 260.0
+offset_bottom = 120.0
+text = "Space 대쉬 준비"

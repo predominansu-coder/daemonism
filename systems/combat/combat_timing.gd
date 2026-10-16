@@ -14,7 +14,8 @@ enum AttackEndCondition {
 
 
 func is_configured() -> bool:
-	return is_finite(attack_duration_seconds) \
+	return attack_end_condition in [AttackEndCondition.DURATION, AttackEndCondition.SEQUENCE_FINISHED] \
+		and is_finite(attack_duration_seconds) \
 		and attack_duration_seconds > 0.0 \
 		and is_finite(action_duration_seconds) \
 		and action_duration_seconds > 0.0
