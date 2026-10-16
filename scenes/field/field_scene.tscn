@@ -1,0 +1,35 @@
+[gd_scene load_steps=6 format=3 uid="uid://dpsnsb1dqymyp"]
+
+[ext_resource type="Script" path="res://scenes/field/field_scene.gd" id="1_field_script"]
+[ext_resource type="PackedScene" path="res://actors/player/player.tscn" id="2_player_scene"]
+[ext_resource type="Script" path="res://scenes/field/debug_grid.gd" id="3_grid_script"]
+[ext_resource type="PackedScene" path="res://actors/enemies/patrol_enemy.tscn" id="4_enemy_scene"]
+[ext_resource type="Resource" path="res://data/encounters/dev_patrol.tres" id="5_encounter"]
+
+[node name="FieldScene" type="Node2D"]
+script = ExtResource("1_field_script")
+
+[node name="World" type="Node2D" parent="."]
+
+[node name="DebugGrid" type="Node2D" parent="World"]
+script = ExtResource("3_grid_script")
+
+[node name="Player" parent="World" instance=ExtResource("2_player_scene")]
+
+[node name="Enemies" type="Node2D" parent="World"]
+
+[node name="DevPatrolEnemy" parent="World/Enemies" instance=ExtResource("4_enemy_scene")]
+position = Vector2(200, 0)
+encounter_definition = ExtResource("5_encounter")
+spawn_id = &"dev.spawn_01"
+patrol_offset = Vector2(0, 120)
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="UIRoot" type="Control" parent="HUD"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

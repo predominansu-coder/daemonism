@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://dl8n18xqj8yo4"]
+
+[ext_resource type="Script" uid="uid://crrj3cj0ppk3" path="res://tests/save_smoke_test.gd" id="1_ex4nb"]
+
+[node name="SaveSmokeTest" type="Node" unique_id=864180053]
+script = ExtResource("1_ex4nb")
+test_action = "LOAD"

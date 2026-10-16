@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://dgwtcp5ll37lr"]
+
+[ext_resource type="Script" uid="uid://dyp71cc8tc0v7" path="res://scenes/ui/title_screen.gd" id="1_eb34j"]
+
+[node name="TitleScreen" type="CanvasLayer" unique_id=1678147780]
+script = ExtResource("1_eb34j")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=187503670]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=50789073]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1377421340]
+layout_mode = 2
+text = "DAEMONISM"
+
+[node name="StartButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=266330456]
+layout_mode = 2
+text = "게임 시작"

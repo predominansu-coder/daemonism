@@ -1,0 +1,76 @@
+[gd_scene load_steps=4 format=3 uid="uid://b7hray5qw17ob"]
+
+[ext_resource type="Script" path="res://scenes/combat/combat_scene.gd" id="1_combat_script"]
+[ext_resource type="Script" path="res://systems/combat/combat_director.gd" id="2_director"]
+[ext_resource type="Script" path="res://systems/combat/attack_phase_gate.gd" id="3_attack_gate"]
+
+[node name="CombatScene" type="Node2D"]
+script = ExtResource("1_combat_script")
+
+[node name="Arena" type="Node2D" parent="."]
+
+[node name="CombatDirector" type="Node" parent="."]
+script = ExtResource("2_director")
+
+[node name="AttackPhaseGate" type="Node" parent="CombatDirector"]
+script = ExtResource("3_attack_gate")
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="UIRoot" type="Control" parent="HUD"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ActionWindowHUD" type="MarginContainer" parent="HUD/UIRoot"]
+visible = false
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 24.0
+offset_top = 16.0
+offset_right = -24.0
+offset_bottom = 78.0
+grow_horizontal = 2
+mouse_filter = 2
+
+[node name="TimingContent" type="VBoxContainer" parent="HUD/UIRoot/ActionWindowHUD"]
+layout_mode = 2
+
+[node name="TimeLabel" type="Label" parent="HUD/UIRoot/ActionWindowHUD/TimingContent"]
+layout_mode = 2
+text = "행동 가능 시간"
+
+[node name="TimeBar" type="ProgressBar" parent="HUD/UIRoot/ActionWindowHUD/TimingContent"]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+size_flags_horizontal = 3
+show_percentage = false
+
+[node name="CenterContainer" type="CenterContainer" parent="HUD/UIRoot"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HUD/UIRoot/CenterContainer"]
+layout_mode = 2
+
+[node name="EncounterLabel" type="Label" parent="HUD/UIRoot/CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "조우 정보 준비 중"
+horizontal_alignment = 1
+
+[node name="PhaseLabel" type="Label" parent="HUD/UIRoot/CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "전투 준비 중"
+horizontal_alignment = 1
+
+[node name="DevelopmentExitButton" type="Button" parent="HUD/UIRoot/CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "개발용 복귀 (전투 결과 없음)"

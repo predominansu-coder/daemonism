@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="EncounterDefinition" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://systems/encounters/encounter_definition.gd" id="1_def"]
+[ext_resource type="Resource" path="res://data/combat/dev_combat_timing.tres" id="2_timing"]
+
+[resource]
+script = ExtResource("1_def")
+encounter_id = &"dev.patrol_01"
+enemy_ids = PackedStringArray("dev.enemy_01")
+combat_timing = ExtResource("2_timing")

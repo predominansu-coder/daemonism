@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://jj2ahb5yf7ho"]
+
+[ext_resource type="Script" uid="uid://d3mvyipm0f0yt" path="res://core/game_root.gd" id="1_x0thd"]
+[ext_resource type="PackedScene" uid="uid://dgwtcp5ll37lr" path="res://scenes/ui/title_screen.tscn" id="2_5gaxf"]
+[ext_resource type="PackedScene" uid="uid://dpsnsb1dqymyp" path="res://scenes/field/field_scene.tscn" id="3_kfc6p"]
+[ext_resource type="PackedScene" uid="uid://b7hray5qw17ob" path="res://scenes/combat/combat_scene.tscn" id="4_qby72"]
+
+[node name="GameRoot" type="Node" unique_id=1405845512]
+script = ExtResource("1_x0thd")
+starting_scene = ExtResource("2_5gaxf")
+field_scene = ExtResource("3_kfc6p")
+combat_scene = ExtResource("4_qby72")
+
+[node name="SceneHost" type="Node" parent="." unique_id=815767634]

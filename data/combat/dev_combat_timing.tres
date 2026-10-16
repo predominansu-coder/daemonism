@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="CombatTiming" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://systems/combat/combat_timing.gd" id="1_timing"]
+
+[resource]
+script = ExtResource("1_timing")
+attack_end_condition = 0
+attack_duration_seconds = 3.5
+action_duration_seconds = 6.0

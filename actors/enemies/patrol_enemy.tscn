@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://actors/enemies/patrol_enemy.gd" id="1_enemy"]
+
+[sub_resource type="CircleShape2D" id="EnemyBody"]
+radius = 10.0
+
+[sub_resource type="CircleShape2D" id="EncounterSensor"]
+radius = 27.0
+
+[node name="PatrolEnemy" type="CharacterBody2D"]
+script = ExtResource("1_enemy")
+
+[node name="TemporaryVisual" type="Polygon2D" parent="."]
+color = Color(0.94, 0.52, 0.42, 1)
+polygon = PackedVector2Array(0, -12, 12, 0, 0, 12, -12, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("EnemyBody")
+
+[node name="EncounterArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EncounterArea"]
+shape = SubResource("EncounterSensor")
