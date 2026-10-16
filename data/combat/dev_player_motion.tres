@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="PlayerMotionSettings" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://systems/combat/player_motion_settings.gd" id="1_motion"]
+
+[resource]
+script = ExtResource("1_motion")
+move_speed = 180.0
+dash_speed = 540.0
+dash_duration_seconds = 0.14
+dash_cooldown_seconds = 0.65

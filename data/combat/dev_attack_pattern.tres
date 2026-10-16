@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="AttackPatternDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://systems/combat/patterns/attack_pattern_definition.gd" id="1_pattern"]
+
+[resource]
+script = ExtResource("1_pattern")
+volley_count = 3
+projectiles_per_volley = 3
+telegraph_seconds = 0.45
+volley_interval_seconds = 0.35
+projectile_speed = 180.0
+projectile_lifetime_seconds = 4.0
+spread_degrees = 38.0
+normalized_origin = Vector2(0.5, 0.08)
+projectile_radius = 6.0

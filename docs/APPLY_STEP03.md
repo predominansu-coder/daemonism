@@ -1,5 +1,7 @@
 # DAEMONISM — Step 03 설치 및 실행 확인 안내
 
+> **과거 적용 기록:** 현재 저장소에는 Step 03이 이미 적용되어 있습니다. 이 문서의 수동 파일 교체 절차를 다시 실행하지 마세요. 최신 전투 기반과 검증 방법은 [COMBAT_PHASE_BASELINE.md](COMBAT_PHASE_BASELINE.md), [DEVELOPMENT.md](DEVELOPMENT.md), [IMPLEMENTATION_STATUS.md](IMPLEMENTATION_STATUS.md)를 따릅니다. 아래 내용은 2026-10-15 당시의 이력으로 보존합니다.
+
 이 문서는 **파일 적용용 절차**이며, `docs`에 넣는 것만으로 전투 코드가 설치되는 것은 아닙니다. 2026-10-15에 제공한 Step 03 개별 `.gd`, `.tscn`, `.tres`를 대상으로 작성했습니다.
 
 ## 추가하는 실행 파일
